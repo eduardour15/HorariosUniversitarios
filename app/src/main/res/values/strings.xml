@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Rutas</string>
+    <string name="buscar_personal">Buscar Personal</string>
+    <string name="buscar_bus">Buscar bus</string>
+    <string name="nombre">Nombre del bus</string>
+    <string name="telefono">Teléfono</string>
+    <string name="salida">Salida</string>
+    <string name="llegada">Llegada</string>
+    <string name="guardar">Guardar</string>
+    <string name="editar">Editar</string>
+    <string name="borrar">Borrar</string>
+    <string name="BORRAR_PERSONAL">¿Borrar autobus?</string>
+    <string name="yes">Si, borrar</string>
+    <string name="no">No, cancelar</string>
+</resources>
