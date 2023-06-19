@@ -8,11 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.rutas.config.Constantes
 import com.example.rutas.config.PersonalApp.Companion.db
 import com.example.rutas.models.Personal
+import com.example.rutas.repository.PersonalRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FormularioViewModel : ViewModel() {
+class FormularioViewModel() : ViewModel() {
+    private val personalRepository: PersonalRepository = PersonalRepository(db.personalDao())
     var id = MutableLiveData<Long>()
     var nombre = MutableLiveData<String>()
     var telefono = MutableLiveData<String>()
@@ -26,29 +28,23 @@ class FormularioViewModel : ViewModel() {
     }
 
     fun guardarUsuario() {
-
         if (validarInformacion()) {
-            var mPersonal =
-                Personal(0, nombre.value!!, salida.value!!, llegada.value!!, telefono.value!!)
+            val mPersonal = Personal(0, nombre.value!!, salida.value!!, llegada.value!!, telefono.value!!)
             when (operacion) {
                 Constantes.OPERACION_INSERTAR -> {
                     viewModelScope.launch {
                         val result = withContext(Dispatchers.IO) {
-                            db.personalDao().insert(
-                                arrayListOf<Personal>(mPersonal)
-                            )
+                            personalRepository.insertPersonal(listOf(mPersonal))
                         }
                         operacionExitosa.value = result.isNotEmpty()
                     }
                 }
-
                 Constantes.OPERACION_EDITAR -> {
                     mPersonal.idBus = id.value!!
                     viewModelScope.launch {
                         val result = withContext(Dispatchers.IO) {
-                            db.personalDao().update(mPersonal)
+                            personalRepository.updatePersonal(mPersonal)
                         }
-
                         operacionExitosa.value = (result > 0)
                     }
                 }
@@ -56,22 +52,19 @@ class FormularioViewModel : ViewModel() {
         } else {
             operacionExitosa.value = false
         }
-
     }
-
-
     fun cargarDatos() {
         viewModelScope.launch {
-            var persona: Personal = withContext(Dispatchers.IO) {
-                db.personalDao().getById(id.value!!)
+            val persona: Personal = withContext(Dispatchers.IO) {
+                personalRepository.getPersonalById(id.value!!)
             }
-
             nombre.value = persona.nombre
             salida.value = persona.salida
             llegada.value = persona.llegada
             telefono.value = persona.telefono
         }
     }
+
 
     private fun validarInformacion(): Boolean {
         //Devuelve true si la informacion no es nula o vacía
@@ -83,13 +76,13 @@ class FormularioViewModel : ViewModel() {
     }
 
     fun eliminarPersonal() {
-        var mPersonal =
-            Personal(id.value!!, "", "", "", "")
+        val mPersonal = Personal(id.value!!, "", "", "", "")
         viewModelScope.launch {
-            var result = withContext(Dispatchers.IO) {
-                db.personalDao().delete(mPersonal)
+            val result = withContext(Dispatchers.IO) {
+                personalRepository.deletePersonal(mPersonal)
             }
             operacionExitosa.value = (result > 0)
         }
     }
+
 }
