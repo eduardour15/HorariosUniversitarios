@@ -1,6 +1,6 @@
 package com.example.rutas.adaptadores
 
-import FormularioActivity
+
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import com.example.rutas.R
 import com.example.rutas.config.Constantes
 import com.example.rutas.databinding.ItemListBinding
 import com.example.rutas.models.Personal
-
+import com.example.rutas.ui.FormularioActivity
 
 
 class PersonalAdapter(private val dataSet: List<Personal>?) :
@@ -45,7 +45,7 @@ class PersonalAdapter(private val dataSet: List<Personal>?) :
             binding.tvSalida.text = item.salida
 
             binding.root.setOnClickListener {
-                val intent = Intent(contexto,FormularioActivity::class.java)
+                val intent = Intent(contexto, FormularioActivity::class.java)
                 intent.putExtra(Constantes.OPERACION_KEY,Constantes.OPERACION_EDITAR)
                 intent.putExtra(Constantes.ID_PERSONAL_KEY,item.idBus)
                 contexto.startActivity(intent)

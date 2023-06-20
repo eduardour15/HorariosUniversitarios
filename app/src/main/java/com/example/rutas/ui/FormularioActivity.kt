@@ -1,3 +1,5 @@
+package com.example.rutas.ui
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,7 +8,6 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.rutas.MainActivity
-import com.example.rutas.R
 import com.example.rutas.config.Constantes
 import com.example.rutas.databinding.ActivityFormularioBinding
 import com.example.rutas.dialogos.BorrarDialogo

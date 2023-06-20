@@ -1,6 +1,5 @@
 package com.example.rutas
 
-import FormularioActivity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rutas.adaptadores.PersonalAdapter
 import com.example.rutas.config.Constantes
 import com.example.rutas.databinding.ActivityMainBinding
+import com.example.rutas.ui.FormularioActivity
 
 import com.example.rutas.viewmodel.MainViewModel
 

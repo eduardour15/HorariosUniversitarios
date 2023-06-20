@@ -12,6 +12,7 @@ import com.example.rutas.repository.PersonalRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.UUID
 
 class FormularioViewModel() : ViewModel() {
     private val personalRepository: PersonalRepository = PersonalRepository(db.personalDao())
@@ -23,13 +24,9 @@ class FormularioViewModel() : ViewModel() {
     var operacion: String = Constantes.OPERACION_INSERTAR
     var operacionExitosa = MutableLiveData<Boolean>()
 
-    init {
-        salida.value = "Chinandega"
-    }
-
     fun guardarUsuario() {
         if (validarInformacion()) {
-            val mPersonal = Personal("0", nombre.value!!, salida.value!!, llegada.value!!, telefono.value!!)
+            val mPersonal = Personal(UUID.randomUUID().toString(), nombre.value!!, salida.value!!, llegada.value!!, telefono.value!!)
             when (operacion) {
                 Constantes.OPERACION_INSERTAR -> {
                     viewModelScope.launch {
