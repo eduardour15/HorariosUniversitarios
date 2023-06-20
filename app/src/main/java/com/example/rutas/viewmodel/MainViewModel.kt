@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.example.rutas.models.Personal
 import com.google.firebase.firestore.FirebaseFirestore
 
-
 class MainViewModel : ViewModel() {
     val personalList = MutableLiveData<List<Personal>>()
     val parametroBusqueda = MutableLiveData<String>()
@@ -33,15 +32,23 @@ class MainViewModel : ViewModel() {
     fun buscarPersonal() {
         val busqueda = parametroBusqueda.value ?: ""
 
-        personalCollection.whereEqualTo("nombre", busqueda)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                val personalData = querySnapshot.toObjects(Personal::class.java)
-                personalList.value = personalData
-            }
-            .addOnFailureListener { error ->
-                Log.e("Firestore", "Error al buscar el personal: ${error.message}")
-            }
+        if (busqueda.isEmpty()) {
+            iniciar()
+        } else {
+            personalCollection.whereEqualTo("nombre", busqueda)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    val personalData = querySnapshot.toObjects(Personal::class.java)
+                    personalList.value = personalData
+                }
+                .addOnFailureListener { error ->
+                    Log.e("Firestore", "Error al buscar el personal: ${error.message}")
+                }
+        }
     }
-}
+    fun actualizarBusqueda(busqueda: String) {
+        parametroBusqueda.value = busqueda
+        buscarPersonal()
+    }
 
+}

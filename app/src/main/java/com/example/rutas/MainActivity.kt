@@ -52,10 +52,15 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                if (p0.toString().isNotEmpty()) {
-                    viewModel.buscarPersonal()
+                val busqueda = p0.toString().trim()
+
+                if (busqueda.isEmpty()) {
+                    viewModel.iniciar()
+                } else {
+                    viewModel.actualizarBusqueda(busqueda)
                 }
             }
         })
+
     }
 }
