@@ -1,5 +1,3 @@
-package com.example.rutas.ui
-
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,7 +5,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import com.example.rutas.MainActivity
 import com.example.rutas.R
 import com.example.rutas.config.Constantes
@@ -16,15 +13,16 @@ import com.example.rutas.dialogos.BorrarDialogo
 import com.example.rutas.viewmodel.FormularioViewModel
 
 class FormularioActivity : AppCompatActivity(), BorrarDialogo.BorrarListener {
-    lateinit var binding: ActivityFormularioBinding
-    lateinit var viewModel: FormularioViewModel
-    lateinit var dialogoBorrar: BorrarDialogo
+    private lateinit var binding: ActivityFormularioBinding
+    private lateinit var viewModel: FormularioViewModel
+    private lateinit var dialogoBorrar: BorrarDialogo
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFormularioBinding.inflate(layoutInflater)
         setContentView(binding.root)
         dialogoBorrar = BorrarDialogo(this)
-        viewModel = ViewModelProvider(this).get()
+        viewModel = ViewModelProvider(this).get(FormularioViewModel::class.java)
         viewModel.operacion = intent.getStringExtra(Constantes.OPERACION_KEY)!!
         binding.modelo = viewModel
         binding.lifecycleOwner = this
@@ -37,23 +35,24 @@ class FormularioActivity : AppCompatActivity(), BorrarDialogo.BorrarListener {
                 mostrarMensaje("Ocurrió un error")
             }
         })
-        if (viewModel.operacion.equals(Constantes.OPERACION_EDITAR)) {
-            viewModel.id.value = intent.getLongExtra(Constantes.ID_PERSONAL_KEY, 0)
+
+        if (viewModel.operacion == Constantes.OPERACION_EDITAR) {
+            viewModel.id.value = intent.getStringExtra(Constantes.ID_PERSONAL_KEY)
             viewModel.cargarDatos()
             binding.linearEditar.visibility = View.VISIBLE
             binding.btnGuardar.visibility = View.GONE
-
         } else {
             binding.linearEditar.visibility = View.GONE
             binding.btnGuardar.visibility = View.VISIBLE
         }
+
         binding.btnBorrar.setOnClickListener{
             mostrarDialogo()
         }
     }
 
     private fun mostrarDialogo() {
-        dialogoBorrar.show(supportFragmentManager,"Dialogo Borrar")
+        dialogoBorrar.show(supportFragmentManager, "Dialogo Borrar")
     }
 
     private fun irAlInicio() {

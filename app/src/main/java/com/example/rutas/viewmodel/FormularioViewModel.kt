@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 
 class FormularioViewModel() : ViewModel() {
     private val personalRepository: PersonalRepository = PersonalRepository(db.personalDao())
-    var id = MutableLiveData<Long>()
+    var id = MutableLiveData<String>()
     var nombre = MutableLiveData<String>()
     var telefono = MutableLiveData<String>()
     var salida = MutableLiveData<String>()
@@ -29,7 +29,7 @@ class FormularioViewModel() : ViewModel() {
 
     fun guardarUsuario() {
         if (validarInformacion()) {
-            val mPersonal = Personal(0, nombre.value!!, salida.value!!, llegada.value!!, telefono.value!!)
+            val mPersonal = Personal("0", nombre.value!!, salida.value!!, llegada.value!!, telefono.value!!)
             when (operacion) {
                 Constantes.OPERACION_INSERTAR -> {
                     viewModelScope.launch {
@@ -56,7 +56,7 @@ class FormularioViewModel() : ViewModel() {
     fun cargarDatos() {
         viewModelScope.launch {
             val persona: Personal = withContext(Dispatchers.IO) {
-                personalRepository.getPersonalById(id.value!!)
+                personalRepository.getPersonalById(id.value!!.toString())
             }
             nombre.value = persona.nombre
             salida.value = persona.salida
